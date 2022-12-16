@@ -27,4 +27,10 @@
         android:orderInCategory="400"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/shuffle_minigame"
+        android:title="shuffle_words(4-7)"
+        android:orderInCategory="500"
+        app:showAsAction="never"
+        />
 </menu>
