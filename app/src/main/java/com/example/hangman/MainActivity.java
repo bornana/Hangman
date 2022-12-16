@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     EditText letter;
     TextView error, word, used_words;
     String[] Ewords, NoWords, Hwords, Exwords;
+    String[][] AllDiffs = new String[][]{Ewords,NoWords,Hwords,Exwords};
+    boolean[] IsThisDiff = new boolean[]{IsEasy, IsNormal, IsHard, IsExtreme};
     char[] setword;
     boolean InWord, IsEasy, IsNormal, IsHard, IsExtreme, DidWin;
     int i;
@@ -62,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (letter.getText().toString().length() < 1) {
+                /*if (letter.getText().toString().length() < 1) {
                     error.setText("input a letter !");
                 }
                 if (letter.getText().toString().length() > 1) {
                     error.setText("input just one letter !");
-                }
+                }*/
             }
 
             @Override
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
 
-        if (id == R.id.easy_diff) {
+        /*if (id == R.id.easy_diff) {
             SetByDiff(Ewords);
             IsEasy = true;
             IsNormal = false;
@@ -128,14 +130,30 @@ public class MainActivity extends AppCompatActivity {
             IsNormal = false;
             IsHard = false;
             IsExtreme = true;
-            ChangeDiff();        }
+            ChangeDiff();    }*/
+            if(R.id.shuffle_minigame == id) {
+            int ChosenDiff;
+            Random diff = new Random();
+            ChosenDiff = diff.nextInt(4);
+            SetByDiff(AllDiffs[ChosenDiff]);
+            for(k == 0; k < IsThisDiff.length; k++){
+                if(k == ChosenDiff){
+                    IsThisDiff[k] = true
+                    }
+                else{
+                    IsTHisDiff[k] = false
+                    }
+             }
+            ChangeDiff()
+            }
+            
         return true;
 
     }
 
     public void WordCheck(boolean diff, Intent intent, String[] arr){
-        if (letter.getText().toString().length() == 1 && diff && !Alreadytyped(used_words_help.toString(), letter.getText().toString().charAt(0))) {
-            used_words_help += letter.getText().toString() + " , ";
+        if (diff) {
+            /*used_words_help += letter.getText().toString() + " , ";
             for (int i = 0; i < arr[randint].length(); i++) {
                 if (letter.getText().toString().charAt(0) == arr[randint].charAt(i)) {
                     setword[i] = letter.getText().toString().charAt(0);
@@ -153,9 +171,24 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("word", arr[randint]);
                 startActivity(intent);
                 Reset();
+            }*/
+            
+            if(letter.getText().toString() == arr[randint]){
+                DidWin = true;
+                intent.putExtra("DidWin", DidWin);
+                intent.putExtra("word", arr[randint]);
+                startActivity(intent);
+                Reset();
+            }
+            else(){
+                DidWin = false;
+                intent.putExtra("DidWin", DidWin);
+                intent.putExtra("word", arr[randint]);
+                startActivity(intent);
+                Reset();
             }
 
-            if (InWord) {
+            /*if (InWord) {
 
             }
 
@@ -168,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     Reset();
                 }
-            }
+            }*/
         }
     }
 
@@ -179,6 +212,19 @@ public class MainActivity extends AppCompatActivity {
         }
         return help;
     }
+    public void ShuffleWord(char[] word){
+        char charhelp;
+        int inthelp;
+        Random NumShuffle = new Random();
+        for(int g = 0; g < word.length; word++){
+            help = word[g]
+            inthelp = NumShuffle.nextInt(word.length);
+            word[g] = word[inthelp];
+            word[inthelp] = charhelp;
+        }
+        
+    }
+        
     public void SetByDiff(String[] Words)
     {
         setword = new char[Words[0].length()];
@@ -189,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
         randint = rand.nextInt((10 - 1) + 1);
         for (int j = 0; j < Words[randint].length(); j++)
             setword[j] = '_';
+        ShuffleWord(setword);
         word.setText(ChangeWord(setword));
     }
     public void ChangeDiff(){
